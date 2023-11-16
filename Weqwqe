@@ -1,0 +1,92 @@
+#include <iostream>
+#include <map>
+#include <fstream>
+using namespace std;
+
+int main() {
+   // Создаем мапы для хранения перевода слов
+   map<string, string> engToRus;
+   map<string, string> rusToEng;
+
+   // Открываем файл словаря для чтения
+   ifstream dictFile("slovar.txt");
+
+   // Проверяем, был ли файл успешно открыт
+   if (dictFile.is_open()) {
+      string engWord, rusWord;
+
+      // Считываем слова из файла в мапы
+      while (dictFile >> engWord >> rusWord) {
+         engToRus[engWord] = rusWord;
+         rusToEng[rusWord] = engWord;
+      }
+
+      // Закрываем файл
+      dictFile.close();
+   }
+
+   // Вводим и обрабатываем команды пользователя
+   int choice;
+   while (true) {
+      cout << "Выберите действие:\n";
+      cout << "1. Ввести английское слово и получить русский перевод\n";
+      cout << "2. Ввести русское слово и получить английский перевод\n";
+      cout << "3. Выйти из программы\n";
+      cin >> choice;
+
+      // Пользователь выбрал вариант 1 - получить русский перевод английского слова
+      if (choice == 1) {
+         string engWord;
+         cout << "Введите английское слово: ";
+         cin >> engWord;
+
+         // Проверяем, есть ли перевод для введенного английского слова
+         if (engToRus.count(engWord) > 0) {
+            cout << "Русский перевод: " << engToRus[engWord] << endl;
+         } else {
+            cout << "Перевод для данного слова не найден\n";
+         }
+      }
+
+      // Пользователь выбрал вариант 2 - получить английский перевод русского слова
+      else if (choice == 2) {
+         string rusWord;
+         cout << "Введите русское слово: ";
+         cin >> rusWord;
+
+         // Проверяем, есть ли перевод для введенного русского слова
+         if (rusToEng.count(rusWord) > 0) {
+            cout << "Английский перевод: " << rusToEng[rusWord] << endl;
+         } else {
+            cout << "Перевод для данного слова не найден\n";
+         }
+      }
+
+      // Пользователь выбрал вариант 3 - выйти из программы
+      else if (choice == 3) {
+         // Открываем файл словаря для записи
+         ofstream dictFile("slovar.txt");
+
+         // Перебираем все пары ключ-значение в мапах и записываем их в файл
+         for (const auto& pair : engToRus) {
+            dictFile << pair.first << " " << pair.second << endl;
+         }
+
+         // Закрываем файл
+         dictFile.close();
+
+         // Завершаем программу
+         break;
+      }
+
+      // Пользователь ввел недопустимый вариант
+      else {
+         cout << "Недопустимый вариант, попробуйте снова\n";
+      }
+   }
+
+   return 0;
+}
+
+
+В данной программе мы используе
